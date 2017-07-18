@@ -3,19 +3,18 @@ import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.border.TitledBorder;
-import javax.swing.JToggleButton;
-import javax.swing.JSeparator;
-import javax.swing.JCheckBox;
 @SuppressWarnings("rawtypes")
 public class PositionScreen { 
 
@@ -81,18 +80,24 @@ public class PositionScreen {
 
 
 	public PositionScreen() {
-		initialize();
+		try{
+			initialize();
+		}catch(Exception e){
+			System.out.println("ERROR");
+		}
 	}
 
-	@SuppressWarnings("unchecked")
-	private void initialize() {
+	private void initialize() throws Exception {
 		Util util = new Util();
 		frame = new JFrame();
 		frame.setResizable(false);
-		frame.setBounds(100, 100, 730, 441);
+		frame.setBounds(100, 100, 813, 520);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-		String sampleImageLocation = "C:\\Users\\user\\Desktop\\pad\\Game\\assets\\oso_naked_full.png"; //change to path of the image
+		
+		String assetDir = new File(".").getCanonicalPath()+"\\assets\\";
+		String sampleImageLocation = assetDir+"oso_naked_full.png"; //change to path of the image
+
 		
 		charSelect = new JLabel("");
 		charSelect.setBounds(19, 26, 168, 209);
@@ -112,7 +117,7 @@ public class PositionScreen {
 
 		charDetailsSelect = new JPanel();
 		charDetailsSelect.setBorder(new TitledBorder(null,"Character Details", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		charDetailsSelect.setBounds(19, 277, 472, 118);
+		charDetailsSelect.setBounds(19, 277, 388, 185);
 		frame.getContentPane().add(charDetailsSelect);
 		charDetailsSelect.setLayout(null);
 		
@@ -138,37 +143,37 @@ public class PositionScreen {
 		clothesCbox = new JComboBox();
 		clothesCbox.setModel(new DefaultComboBoxModel(Outfit.values()));
 		clothesCbox.setSelectedIndex(0);
-		clothesCbox.setBounds(65, 77, 99, 20);
+		clothesCbox.setBounds(65, 77, 171, 20);
 		charDetailsSelect.add(clothesCbox);
 		
 		lblArm = new JLabel("Arm:");
-		lblArm.setBounds(204, 43, 46, 14);
+		lblArm.setBounds(6, 105, 46, 14);
 		charDetailsSelect.add(lblArm);
 		
 		armCbox = new JComboBox();
 		armCbox.setModel(new DefaultComboBoxModel(Arm.values()));
 		armCbox.setSelectedIndex(0);
-		armCbox.setBounds(250, 40, 99, 20);
+		armCbox.setBounds(65, 108, 171, 20);
 		
 		charDetailsSelect.add(armCbox);
 		
 		fadeChcbx = new JCheckBox("Fade On");
-		fadeChcbx.setBounds(370, 60, 97, 23);
+		fadeChcbx.setBounds(261, 90, 97, 23);
 		charDetailsSelect.add(fadeChcbx);
 		
 		hideChcnx = new JCheckBox("Hide Pos");
-		hideChcnx.setBounds(370, 30, 97, 23);
+		hideChcnx.setBounds(261, 53, 97, 23);
 		charDetailsSelect.add(hideChcnx);
 		
 		
 		labelPos = new JLabel("Pos:");
-		labelPos.setBounds(204, 75, 97, 20);
+		labelPos.setBounds(6, 140, 97, 20);
 		charDetailsSelect.add(labelPos);
 		
 		posCbox = new JComboBox();
 		posCbox.setModel(new DefaultComboBoxModel(position.values()));
 		posCbox.setSelectedIndex(0);
-		posCbox.setBounds(250, 75, 89, 23);
+		posCbox.setBounds(65, 139, 171, 23);
 		charDetailsSelect.add(posCbox);
 		
 		showChara = new JButton("Add");
@@ -176,8 +181,7 @@ public class PositionScreen {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
-		showChara.setBounds(360, 85, 89, 23);
-		//showChara.setBounds(x, y, width, height);
+		showChara.setBounds(261, 137, 89, 23);
 		charDetailsSelect.add(showChara);
 
 		lblCharacter = new JLabel("Character:");
@@ -191,7 +195,10 @@ public class PositionScreen {
 				String charaSelected = charaCbox.getSelectedItem().toString();
 				outlabl.setText(charaSelected);
 				
-				
+				//prepare the cboxes
+				armCbox.setModel(new DefaultComboBoxModel(util.findImages(assetDir+charaSelected,"arms")));
+				faceCbox.setModel(new DefaultComboBoxModel(util.findImages(assetDir+charaSelected+"//head//","")));
+				clothesCbox.setModel(new DefaultComboBoxModel(util.findImages(assetDir+charaSelected,"noarms")));
 			}
 		});
 		
@@ -203,14 +210,11 @@ public class PositionScreen {
 		frame.getContentPane().add(charaCbox);
 
 		
-		
-		
 		clickPanel = new JPanel();
-		clickPanel.setBorder(new TitledBorder(null,"Character Details", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		clickPanel.setBounds(6, 16, 150, 200);
+		clickPanel.setBorder(new TitledBorder(null,"Selected Character", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		clickPanel.setBounds(417, 277, 165, 174);
 		frame.getContentPane().add(clickPanel);
 		clickPanel.setLayout(null);
-		
 		
 		clickCharacter = new JLabel("Character:");
 		clickCharacter.setBounds(6, 16, 150, 14);
@@ -235,14 +239,9 @@ public class PositionScreen {
 		clickpos = new JLabel("Pos:");
 		clickpos.setBounds(6, 111, 150, 14);
 		clickPanel.add(clickpos);
-		
-		
-		
-		
-		
-		
+
 		JButton btnClear = new JButton("Clear");
-		btnClear.setBounds(555, 277, 96, 35);
+		btnClear.setBounds(634, 277, 96, 35);
 		frame.getContentPane().add(btnClear);
 		
 		JButton btnGenerate = new JButton("Generate Scene");
@@ -251,7 +250,7 @@ public class PositionScreen {
 				//some action
 			}
 		});
-		btnGenerate.setBounds(555, 323, 150, 59);
+		btnGenerate.setBounds(625, 323, 105, 59);
 		frame.getContentPane().add(btnGenerate);
 
 		
