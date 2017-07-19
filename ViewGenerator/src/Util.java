@@ -26,12 +26,27 @@ public class Util {
 				imageFiles.add(fileName);
 			}else if(filter.startsWith("no")){
 				filter = filter.replace("no", "");
-				if(!fileName.contains(filter)&& fileName.contains("png"))
+				if(!(fileName.contains("arms")&& fileName.contains("png"))){
 					imageFiles.add(fileName);
+				}
 			}
 			else if(fileName.contains(filter) && fileName.contains("png")){
 				fileName = fileName.replace(path, "");
-				fileName = fileName.replace(".png", "");
+				imageFiles.add(fileName);
+			}
+		}
+
+		return imageFiles;
+
+	}
+	
+	public Vector<String> findImages(String path){
+		Vector<String> imageFiles = new Vector<>();
+		File fileDir = new File(path);
+
+		for (File fileEntry : fileDir.listFiles()) {
+			String fileName = fileEntry.getName();
+			if(fileName.endsWith("png") && !(fileName.contains("List")||fileName.contains("list"))){
 				imageFiles.add(fileName);
 			}
 		}
